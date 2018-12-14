@@ -26,7 +26,7 @@ testDataPath = "../data/devwithoutlabels.txt"
 solutionPath = "soln/"
 # Path to directory where GloVe file is saved.
 gloveDir = "_files"
-vectorName = "_files/vectors.txt"
+vectorName = "vectors.txt"
 
 NUM_FOLDS = None                   # Value of K in K-fold Cross Validation
 NUM_CLASSES = None                 # Number of classes - Happy, Sad, Angry, Others
@@ -168,8 +168,8 @@ def normalize(s):
     return s.strip()
 
 
-    def preprocessData(dataFilePath, mode):
-        """Load data from a file, process and return indices, conversations and labels in separate lists
+def preprocessData(dataFilePath, mode):
+    """Load data from a file, process and return indices, conversations and labels in separate lists
         Input:
             dataFilePath : Path to train/test file to be processed
             mode : "train" mode returns labels. "test" mode doesn't return labels.
@@ -177,43 +177,43 @@ def normalize(s):
             indices : Unique conversation ID list
             conversations : List of 3 turn conversations, processed and each turn separated by the <eos> tag
             labels : [Only available in "train" mode] List of labels
-        """
-        indices = []
-        conversations = []
-        labels = []
-        u1 = []
-        u2 = []
-        u3 = []
-        with io.open(dataFilePath, encoding="utf8") as finput:
-            finput.readline()
-            for line in finput:
-                line = line.strip().split('\t')
-                line[1] = normalize(line[1])
-                line[2] = normalize(line[2])
-                line[3] = normalize(line[3])
+    """
+    indices = []
+    conversations = []
+    labels = []
+    u1 = []
+    u2 = []
+    u3 = []
+    with io.open(dataFilePath, encoding="utf8") as finput:
+        finput.readline()
+        for line in finput:
+            line = line.strip().split('\t')
+            line[1] = normalize(line[1])
+            line[2] = normalize(line[2])
+            line[3] = normalize(line[3])
 
-                if mode == "train":
-                    # Train data contains id, 3 turns and label
-                    label = emotion2label[line[4]]
-                    labels.append(label)
+            if mode == "train":
+                # Train data contains id, 3 turns and label
+                label = emotion2label[line[4]]
+                labels.append(label)
 
-                conv = ' '.join(line[1:4])
+            conv = ' '.join(line[1:4])
 
-                u1.append(line[1])
-                u2.append(line[2])
-                u3.append(line[3])
+            u1.append(line[1])
+            u2.append(line[2])
+            u3.append(line[3])
 
-                # Remove any duplicate spaces
-                duplicateSpacePattern = re.compile(r'\ +')
-                conv = re.sub(duplicateSpacePattern, ' ', conv)
+            # Remove any duplicate spaces
+            duplicateSpacePattern = re.compile(r'\ +')
+            conv = re.sub(duplicateSpacePattern, ' ', conv)
 
-                indices.append(int(line[0]))
-                conversations.append(conv)
+            indices.append(int(line[0]))
+            conversations.append(conv)
 
-        if mode == "train":
-            return indices, conversations, labels, u1, u2, u3
-        else:
-            return indices, conversations, u1, u2, u3
+    if mode == "train":
+        return indices, conversations, labels, u1, u2, u3
+    else:
+        return indices, conversations, u1, u2, u3
 
 
 def getMetrics(predictions, ground):
@@ -520,7 +520,7 @@ def main():
     print("Found %s unique tokens." % len(wordIndex))
 
     words = [word for word in wordIndex.keys()]
-    with open('vectors\\words.txt', 'w', encoding='utf8') as f:
+    with open('_files/words.txt', 'w', encoding='utf8') as f:
         for item in words:
             f.write("%s\n" % item)
     print("Wrote words to vectors/words.txt...")
