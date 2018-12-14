@@ -1,7 +1,7 @@
 # EmoContext - Task Report
 
-**Student ID:** 801084292
-**Student email:** ddhamani@uncc.edu
+- **Student ID:** 801084292
+- **Student email:** ddhamani@uncc.edu
 
 ## Table of Contents
 
