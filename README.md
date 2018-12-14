@@ -11,6 +11,7 @@
     - [Justification](#justification)
   - [Evaluation (as of 13th December, 2018. 12:30 pm)](#evaluation-as-of-13th-december-2018-1230-pm)
   - [Discussion and Future Plans](#discussion-and-future-plans)
+  - [Text Data Augmentation](#text-data-augmentation)
   
 ## Introduction
 
@@ -20,11 +21,11 @@ Understanding Emotions in Textual Conversations is a hard problem in absence of 
 
 ### Description
 
-In this task, you are given a textual dialogue i.e. a user utterance along with two turns of context, you have to classify the emotion of user utterance as one of the emotion classes: Happy, Sad, Angry or Others. ​
+In this task, you are given a textual dialogue i.e. a user utterance along with two turns of context, you have to classify the emotion of user utterance as one of the emotion classes: `happy`, `sad`, `angry` or `others`. ​
 
 ### Data
 
-The training data set contains 15K records for emotion classes i.e., Happy, Sad and Angry combined. It also contains 15K records not belonging to any of the aforementioned emotion classes. For Test Data,  2703 records of unlabelled data is provided to be used to evaluate models we create. Final testing would be done on as of yet unreleased data.
+The training data set contains `15K` records for emotion classes i.e., `happy`, `sad`, and `angry` combined. It also contains `15K` records not belonging to any of the aforementioned emotion classes. For Test Data,  `2703` records of unlabelled data is provided to be used to evaluate models we create. Final testing would be done on as of yet unreleased data.
 
 Examples from the dataset -
 
@@ -49,20 +50,20 @@ The approach used was a standard one for these sort of short text classification
 
 ### Justification
 
-Pretrained word embeddings + Bi-LSTMs are what is usually used in state of the art text classification systems, so it's choice doesn't need much justification.
+Pre-trained word embeddings + Bi-LSTMs are what is usually used in state of the art text classification systems, so it's choice doesn't need much justification.
 
 3 different Bi-LSTMs were  used for each turn as show in the above diagram, because I felt different representations are needed for each turn, especially considering that they are not equivalent. This hypothesis worked out well in practice, taking me from an F1 of `0.64` to `0.66` upon making the switch on the evaluation dataset.
 
-Custom embeddings were trained and used because our corpus had a lot of textual (such as `:(`, `:p`, etc.)))and unicode emojis (`😍`, `😁`, etc.). FastText did not have good vectors for these - a nearest neighbour search for these words using the fasttext embeddings revealed that fasttext's representations for these words are mostly nonsensical.
+Custom embeddings were trained and used because our corpus had a lot of textual (such as `:(`, `:p`, etc.) and unicode emojis (`😍`, `😁`, etc.). FastText did not have good vectors for these - a nearest neighbour search for these words using the fasttext embeddings revealed that fasttext's representations for these words are mostly nonsensical.
 
 
 ## Evaluation (as of 13th December, 2018. 12:30 pm)
 
-I didn't write proper code to plot graphs for testing and training loss curves, and thusly made random guesses on how many epochs to run the network for. This almost certainly means that my network is either underfitting or overfitting, my guess would be overfitting.
+I didn't write proper code to plot graphs for testing and training loss curves, and thusly made random guesses on how many epochs to run the network for. This almost certainly means that my network is either under-fitting or over-fitting, my guess would be over-fitting.
 
-Regardless, training of the network wasn't done using best practices, something that I plan to correct in the near future. Even so, the best F1 score I recieved was `0.703108` which meant a rank of `44` on the leaderboard, of the total `241` participants.
+Regardless, training of the network wasn't done using best practices, something that I plan to correct in the near future. Even so, the best F1 score I received was `0.703108` which meant a rank of `44` on the leaderboard, of the total `241` participants.
 
-That puts me at approximately the top-20 percentile in the competition. The live leaderboard can be found [here](https://competitions.codalab.org/competitions/19790#results).
+That puts me at approximately the top-20th percentile (`18.25%`) in the competition. The live leaderboard can be found [here](https://competitions.codalab.org/competitions/19790#results).
 
 A table of all of my submisions made to the server is shown below.
 
@@ -159,7 +160,20 @@ Other possible improvements, in no particular order, are noted below -
 - One of the easiest things to do to improve model accuracy is to use a hierarchy of them in tandem. One model using the same architecture as above to predict whether the text messages fall into the `others` category or not, and another to decide whether the model fall into `happy`, `sad`, or `angry` category. The reasoning being the massive class imbalance that exists in the evaluation dataset - `96%` of the records are of the `others` category, while only `4%` are `happy`, `sad`, or `angry`. 
 > It should also be noted that the final F1 score is calculated using only the precision and recall of the `happy`, `sad`, and `angry` categories and the `others` category is ignored. Thusly, implementing a hierarchy might get surprising improvements in the final score.
 - I haven't done this yet because the idea was to find the best performing combination of a Neural Network architecture, Word Embeddings, and pre-processing. After the best model I can make is found, then I'll proceed to implement an hierarchy of classifiers to improve accuracy.
-- Something I am particularly excited to try out is Data Augmentation. Data augmentation is something that is frequently done in Computer Vision and image classification 
+- Another obvious thing to do is to do an train multiple models with different combinations of embeddings, architecture, and pre-processing and then use all of them in an ensemble. Training multiple versions of the same model is also a thing to try out, since it's possible they would converge onto a different set of weights each time, especially if we vary the training hyper-parameters. From what I've been reading, the more models you have, the better.
+- Something that seems to have worked already is adding another `Bi-LSTM` layer between the `embeddings` and `stack` layers, and introducing a residual connection between them. This has led to remarkably faster convergence, and a higher overall accuracy during training, but hasn't been able to beat my best F1 on the evaluation dataset, most likely due to over-fitting. It seems promising though. I need to implement a better training strategy.
+
+## Text Data Augmentation
+
+Something I am particularly excited to try out is Data Augmentation. Data augmentation is something that is frequently done in Computer Vision and image classification, and it has proven to be [quite effective](http://cs231n.stanford.edu/reports/2017/pdfs/300.pdf).
+
+I haven't been able to find many instances of data augmentation being performed on text data, meaning maybe it isn't as useful as I am hoping for it to be. Things I've seen people discuss on the internet are -
+
+- Replacing words with their synonym.
+- Shuffling the order of sentences or paragraphs in large texts.
+- Using machine translation to go from `English -> [Intermediary Language] -> English`, effectively paraphrasing the data, if all goes well.
+
+I do not like the idea of shuffling sentences or words, but the rest seem interesting enough to try. I also have a few ideas of my own, which I think I won't put into words until I've had a chance to try them out. I did tell you about them in class though, if you remember.
 
 
 Data Provided by Microsoft.
