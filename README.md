@@ -44,7 +44,7 @@ Each `turn` here represents a text message in a conversation between two parties
 The approach used was a standard one for these sort of short text classification tasks - pre-trained word vectors in conjunction with LSTMs - modified to fit the unique challenges in this task.
 
 
-![Final architecture of the Neural Network](Architecture_TD.jpg)
+![Final architecture of the Neural Network](Architecture_TD.png)
 <center>Final architecture of the Neural Network</center>
 
 ### Justification
