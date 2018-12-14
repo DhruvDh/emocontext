@@ -9,7 +9,7 @@
     - [Data](#data)
   - [Methodology](#methodology)
     - [Justification](#justification)
-  - [Evaluation](#evaluation)
+  - [Evaluation (as of 13th December, 2018. 12:30 pm)](#evaluation-as-of-13th-december-2018-1230-pm)
   - [Discussion and Future Plans](#discussion-and-future-plans)
   
 ## Introduction
@@ -56,7 +56,7 @@ Pretrained word embeddings + Bi-LSTMs are what is usually used in state of the a
 Custom embeddings were trained and used because our corpus had a lot of textual (such as `:(`, `:p`, etc.)))and unicode emojis (`😍`, `😁`, etc.). FastText did not have good vectors for these - a nearest neighbour search for these words using the fasttext embeddings revealed that fasttext's representations for these words are mostly nonsensical.
 
 
-## Evaluation
+## Evaluation (as of 13th December, 2018. 12:30 pm)
 
 I didn't write proper code to plot graphs for testing and training loss curves, and thusly made random guesses on how many epochs to run the network for. This almost certainly means that my network is either underfitting or overfitting, my guess would be overfitting.
 
