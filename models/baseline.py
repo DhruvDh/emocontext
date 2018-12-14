@@ -20,13 +20,13 @@ import sys
 from keras.models import Model
 
 # Path to training and testing data file. This data can be downloaded from a link, details of which will be provided.
-trainDataPath = "data/train.txt"
-testDataPath = "data/devwithoutlabels.txt"
+trainDataPath = "../data/train.txt"
+testDataPath = "../data/devwithoutlabels.txt"
 # Output file that will be generated. This file can be directly submitted.
-solutionPath = "/"
+solutionPath = "soln/"
 # Path to directory where GloVe file is saved.
-gloveDir = "vectors"
-vectorName = "vectors.txt"
+gloveDir = "_files"
+vectorName = "_files/vectors.txt"
 
 NUM_FOLDS = None                   # Value of K in K-fold Cross Validation
 NUM_CLASSES = None                 # Number of classes - Happy, Sad, Angry, Others
@@ -367,7 +367,7 @@ def getEmbeddingMatrix(wordIndex):
 
 
 def getCustomEmbeddingMatrix(wordIndex):
-    with io.open(os.path.join(gloveDir, 'custom_vectors_V2.5_2500.txt'), 'r', encoding='utf-8', newline='\n', errors='ignore') as fin:
+    with io.open(os.path.join(gloveDir,'custom_vectors_V2.5_2500.txt'), 'r', encoding='utf-8', newline='\n', errors='ignore') as fin:
         data = {}
         for line in fin:
             tokens = line.rstrip().split(' ')
