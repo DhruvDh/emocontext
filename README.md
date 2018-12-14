@@ -44,7 +44,7 @@ Each `turn` here represents a text message in a conversation between two parties
 The approach used was a standard one for these sort of short text classification tasks - pre-trained word vectors in conjunction with LSTMs - modified to fit the unique challenges in this task.
 
 
-![Final architecture of the Neural Network](Architecture_LR.jpg)
+![Final architecture of the Neural Network](Architecture_TD.jpg)
 <center>Final architecture of the Neural Network</center>
 
 ### Justification
@@ -161,3 +161,6 @@ Other possible improvements, in no particular order, are noted below -
 > It should also be noted that the final F1 score is calculated using only the precision and recall of the `happy`, `sad`, and `angry` categories and the `others` category is ignored. Thusly, implementing a hierarchy might get surprising improvements in the final score.
 - I haven't done this yet because the idea was to find the best performing combination of a Neural Network architecture, Word Embeddings, and pre-processing. After the best model I can make is found, then I'll proceed to implement an hierarchy of classifiers to improve accuracy.
 - Something I am particularly excited to try out is Data Augmentation. Data augmentation is something that is frequently done in Computer Vision and image classification 
+
+
+Data Provided by Microsoft.
