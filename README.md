@@ -60,10 +60,9 @@ Custom embeddings were trained and used because our corpus had a lot of textual 
 
 I didn't write proper code to plot graphs for testing and training loss curves, and thusly made random guesses on how many epochs to run the network for. This almost certainly means that my network is either underfitting or overfitting, my guess would be overfitting.
 
-Regardless, training of the network wasn't done using best practices, something that I plan to correct in the near future. Even so, the best F1 score I recieved  
-was `0.703108` which meant a rank of `44` on the leaderboard, of the total `241` participants.
+Regardless, training of the network wasn't done using best practices, something that I plan to correct in the near future. Even so, the best F1 score I recieved was `0.703108` which meant a rank of `44` on the leaderboard, of the total `241` participants.
 
-That puts me at approximately the top-20 percentile in the competition.
+That puts me at approximately the top-20 percentile in the competition. The live leaderboard can be found [here](https://competitions.codalab.org/competitions/19790#results).
 
 A table of all of my submisions made to the server is shown below.
 
