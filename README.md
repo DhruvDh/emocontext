@@ -11,7 +11,7 @@
     - [Justification](#justification)
   - [Evaluation (as of 13th December, 2018. 12:30 pm)](#evaluation-as-of-13th-december-2018-1230-pm)
   - [Discussion and Future Plans](#discussion-and-future-plans)
-  - [Text Data Augmentation](#text-data-augmentation)
+    - [Text Data Augmentation](#text-data-augmentation)
   
 ## Introduction
 
@@ -163,7 +163,7 @@ Other possible improvements, in no particular order, are noted below -
 - Another obvious thing to do is to do an train multiple models with different combinations of embeddings, architecture, and pre-processing and then use all of them in an ensemble. Training multiple versions of the same model is also a thing to try out, since it's possible they would converge onto a different set of weights each time, especially if we vary the training hyper-parameters. From what I've been reading, the more models you have, the better.
 - Something that seems to have worked already is adding another `Bi-LSTM` layer between the `embeddings` and `stack` layers, and introducing a residual connection between them. This has led to remarkably faster convergence, and a higher overall accuracy during training, but hasn't been able to beat my best F1 on the evaluation dataset, most likely due to over-fitting. It seems promising though. I need to implement a better training strategy.
 
-## Text Data Augmentation
+### Text Data Augmentation
 
 Something I am particularly excited to try out is Data Augmentation. Data augmentation is something that is frequently done in Computer Vision and image classification, and it has proven to be [quite effective](http://cs231n.stanford.edu/reports/2017/pdfs/300.pdf).
 
