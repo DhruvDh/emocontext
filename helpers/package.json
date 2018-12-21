@@ -1,0 +1,13 @@
+{
+  "name": "aug",
+  "version": "0.0.1",
+  "description": "text data augmentation for emocontext",
+  "main": "aug.js",
+  "repository": "https://github.com/DhruvDh/emocontext",
+  "author": "ddhamani@uncc.edu",
+  "license": "MIT",
+  "dependencies": {
+    "compromise": "^11.12.4",
+    "spacy-nlp": "^1.0.10"
+  }
+}
