@@ -1,4 +1,13 @@
 import regex as re
+from sklearn.utils import class_weight
+import pandas as pd
+import numpy as np
+import torch
+import io, sys, os
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+import torchvision
+
 
 def normalize(s):
     """
@@ -81,7 +90,7 @@ def normalize(s):
     s = re.sub(r'([\,]+)', r' \1 ', s)
 
     # Isolate emojis
-    s = re.sub('([\U00010000-\U0010ffff]+)', r' \1 ', s, flags=re.UNICODE)
+    s = re.sub('([\U00010000-\U0010ffff])', r' \1 ', s, flags=re.UNICODE)
 
     # dealing with hashtags
     s = re_sub(r"#\S+", hashtag)
@@ -99,3 +108,64 @@ def normalize(s):
     s = re_sub(r"(\s*:\s*)+(\s*o\s*)+", " :o ")
 
     return s.strip()
+
+def get_class_weights(series):
+    return torch.tensor(class_weight.compute_class_weight(
+        'balanced', series.unique(), np.array(series.tolist())
+    )).float()
+
+def get_embedding_matrix(wordIndex, file_name, embedding_dimensions):
+    with io.open(os.path.join('..', '_files', file_name), 'r', encoding='utf-8', newline='\n', errors='ignore') as fin:
+        data = {}
+        for line in fin:
+            tokens = line.rstrip().split(' ')
+            data[tokens[0]] = list(map(float, tokens[1:]))
+
+    # Minimum word index of any word is 1.
+    embeddingMatrix = np.zeros((len(wordIndex) + 1, embedding_dimensions))
+    for word, i in wordIndex.items():
+        embeddingVector = data.get(word)
+        if embeddingVector is not None:
+            # words not found in embedding index will be all-zeros.
+            embeddingMatrix[i] = embeddingVector
+        else:
+            print('no custom vector for ', word)
+
+    return torch.stack([torch.tensor(x) for x in embeddingMatrix])
+
+def make_tensors(dataset):
+    tokenizer = Tokenizer(num_words=None, filters='')
+    tokenizer.fit_on_texts(dataset['turn1'].tolist() + dataset['turn2'].tolist() + dataset['turn3'].tolist())
+
+    turn1 = [[len(x)] + x for x in tokenizer.texts_to_sequences(dataset['turn1'].tolist())]
+    turn2 = [[len(x)] + x for x in tokenizer.texts_to_sequences(dataset['turn2'].tolist())]
+    turn3 = [[len(x)] + x for x in tokenizer.texts_to_sequences(dataset['turn3'].tolist())]
+
+    len1 = torch.stack([torch.tensor(x[0]).long() for x in turn1]).unsqueeze(1)
+    len2 = torch.stack([torch.tensor(x[0]).long() for x in turn2]).unsqueeze(1)
+    len3 = torch.stack([torch.tensor(x[0]).long() for x in turn3]).unsqueeze(1)
+
+    turn1 = torch.stack([torch.tensor(x).long() for x in pad_sequences([x[1:] for x in turn1])])
+    turn2 = torch.stack([torch.tensor(x).long() for x in pad_sequences([x[1:] for x in turn2])])
+    turn3 = torch.stack([torch.tensor(x).long() for x in pad_sequences([x[1:] for x in turn3])])
+
+    label_tokenizer = Tokenizer(num_words=None, filters='')
+    label_tokenizer.fit_on_texts(dataset['label'].tolist())
+
+    labels = [label_tokenizer.word_index[x] - 1 for x in dataset['label'].tolist()]
+    labels = torch.tensor(labels).long().unsqueeze(1)
+
+    return (    
+        torch.cat(
+            (
+                len1, len2, len3,
+                turn1, turn2, turn3,
+                labels
+            ),
+            dim=1),
+        turn1.shape[1],
+        turn2.shape[1],
+        turn3.shape[1],
+        tokenizer,
+        label_tokenizer.word_index
+    )
