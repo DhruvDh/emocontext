@@ -90,6 +90,15 @@ ENV/
 env.bak/
 venv.bak/
 
+helpers/__pycache__
+models/.ipynb_checkpoints
+
+helpers/aug/node_modules
+helpers/aug/yarn.lock
+
+models/t1_model
+models/t2_model
+
 # Spyder project settings
 .spyderproject
 .spyproject
