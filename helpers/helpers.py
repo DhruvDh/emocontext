@@ -254,7 +254,7 @@ def normalize(s):
     s = re_sub(r"\s+", " ")
     return s.strip()
 
-def get_class_weights(series):
+def get_class_weights(series, labels):
     return torch.tensor(class_weight.compute_class_weight(
         'balanced', series.unique(), np.array(series.tolist())
     )).float()
