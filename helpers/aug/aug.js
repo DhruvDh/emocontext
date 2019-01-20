@@ -1,20 +1,18 @@
-var nlp = require('compromise');
-const spacy = require("spacy-nlp");
-var spacyServer = spacy.server({ port: process.env.IOPORT });
+let nlp = require('compromise');
+let emoji = require('node-emoji');
+const fs = require('fs')
 
-spacyServer.then(() => {
-    console.log("Spacy is ready...");
-    const nlp = spacy.nlp;
+console.log(nlp('arey u r not responding now  👿  👿').match("#emoji").out('array'))
+console.log(emoji.replace("i blow ...  minds !   💥  😂  😂", (emoji) => `${emoji.key}`))
 
-    nlp.parse("dhruv is a great guy").then(output => {
-        console.log(output);
-        console.log(JSON.stringify(output[0].parse_tree, null, 2));
-      }).catch(error => {
-          console.log(error)
-      });
-}).catch(error => {
-    console.log("Spacy couldn't start due to...");
-    console.log(error)
-})
+console.log(emoji.find("collision"))
 
-console.log(nlp('dhruv is a great guy').terms().data())
+let corpus = fs.readFileSync('../../_files/corpus.txt', 'utf8').split('\n')
+corpus = corpus.slice(0, 50).map(x => nlp(x.trim()).contractions().expand().all().out('text'))
+
+console.log(corpus.slice(0, 50))
+let auged = []
+
+// corpus.forEach(line => {
+//     let expanded = nlp(line).expand().out('text')
+// })

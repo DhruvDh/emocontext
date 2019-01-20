@@ -99,6 +99,8 @@ helpers/aug/yarn.lock
 models/t1_model
 models/t2_model
 
+_files/vectors
+
 # Spyder project settings
 .spyderproject
 .spyproject
