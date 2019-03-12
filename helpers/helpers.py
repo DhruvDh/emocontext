@@ -7,7 +7,7 @@ import io, sys, os
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import torchvision
-
+import emoji
 
 def normalize(s):
     """
@@ -48,47 +48,51 @@ def normalize(s):
     s = s.lower()
     s = re.sub(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ' _ip_ ', s)
 
-    for emoji in sad:
-        s = s.replace(emoji.lower(), ' :( ')
+    s = emoji.demojize(s)
+    s = re_sub(r":([^\s])*:", r" \1 ")
+    s = " ".join(s.split("_"))
 
-    for emoji in smile:
-        s = s.replace(emoji.lower(), ' :) ')
+    for emojis in sad:
+        s = s.replace(emojis.lower(), ' :( ')
 
-    for emoji in laugh:
-        s = s.replace(emoji.lower(), ' :d ')
+    for emojis in smile:
+        s = s.replace(emojis.lower(), ' :) ')
 
-    for emoji in wink:
-        s = s.replace(emoji.lower(), ' ;) ')
+    for emojis in laugh:
+        s = s.replace(emojis.lower(), ' :d ')
 
-    for emoji in tongue:
-        s = s.replace(emoji.lower(), ' :p ')
+    for emojis in wink:
+        s = s.replace(emojis.lower(), ' ;) ')
 
-    for emoji in annoyed:
-        s = s.replace(emoji.lower(), ' :/ ')
+    for emojis in tongue:
+        s = s.replace(emojis.lower(), ' :p ')
 
-    for emoji in surprise:
-        s = s.replace(emoji.lower(), ' :o ')
+    for emojis in annoyed:
+        s = s.replace(emojis.lower(), ' :/ ')
 
-    for emoji in cry:
-        s = s.replace(emoji.lower(), ' :( ')
+    for emojis in surprise:
+        s = s.replace(emojis.lower(), ' :o ')
+
+    for emojis in cry:
+        s = s.replace(emojis.lower(), ' :( ')
 
     # Isolate punctuation
     # s = re.sub(r'([\'\"\.\(\)\!\?\-\\\/\,]+)', r' \1 ', s)
     # dont wanna mess with '
     # s = re.sub(r'([\']+)', r' \1 ', s)
-    s = re.sub(r'([\"])', r' \1 ', s)
-    s = re.sub(r'([\.])', r' \1 ', s)
-    s = re.sub(r'([\(])', r' \1 ', s)
-    s = re.sub(r'([\)])', r' \1 ', s)
-    s = re.sub(r'([\!])', r' \1 ', s)
-    s = re.sub(r'([\?])', r' \1 ', s)
-    s = re.sub(r'([\-])', r' \1 ', s)
-    s = re.sub(r'([\\])', r' \1 ', s)
-    s = re.sub(r'([\/])', r' \1 ', s)
-    s = re.sub(r'([\,])', r' \1 ', s)
+    s = re.sub(r'([\"]+)', r' \1 ', s)
+    s = re.sub(r'([\.]+)', r' \1 ', s)
+    s = re.sub(r'([\(]+)', r' \1 ', s)
+    s = re.sub(r'([\)]+)', r' \1 ', s)
+    s = re.sub(r'([\!]+)', r' \1 ', s)
+    s = re.sub(r'([\?]+)', r' \1 ', s)
+    s = re.sub(r'([\-]+)', r' \1 ', s)
+    s = re.sub(r'([\\]+)', r' \1 ', s)
+    s = re.sub(r'([\/]+)', r' \1 ', s)
+    s = re.sub(r'([\,]+)', r' \1 ', s)
 
     # Isolate emojis
-    s = re.sub('([\U00010000-\U0010ffff])', r' \1 ', s, flags=re.UNICODE)
+    s = re.sub('([\U00010000-\U0010ffff]+)', r' \1 ', s, flags=re.UNICODE)
 
 
     # dealing with hashtags
@@ -274,7 +278,7 @@ def get_embedding_matrix(wordIndex, file_name, embedding_dimensions):
             # words not found in embedding index will be all-zeros.
             embeddingMatrix[i] = embeddingVector
         else:
-            print('no custom vector for ', word)
+            print('no vector for ', word)
 
     return torch.stack([torch.tensor(x) for x in embeddingMatrix])
 

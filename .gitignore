@@ -118,3 +118,7 @@ _files/vectors
 .mypy_cache/
 
 helpers/node_modules
+
+models/model
+models/t1_model
+models/t2_model

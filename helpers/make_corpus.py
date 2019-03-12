@@ -6,11 +6,11 @@ from keras.preprocessing.text import Tokenizer
 
 # clear file
 # file = 'custom_corpus.txt'
-file = 'corpus.txt'
+file = 'corpus_without_emoji.txt'
 open("../_files/" + file, "w").close()
 
 _max = 0
-with open('../_files/' + 'corpus.txt', 'w', encoding='utf8') as f:
+with open('../_files/' + file, 'w', encoding='utf8') as f:
     print("Normalising train.txt...")
     for index, row in pd.read_csv("../data/train.txt", sep="\t").iterrows():
         f.write("%s\n" % normalize(row['turn1']))

@@ -1,0 +1,17 @@
+{
+    "train_data_path": "../data/train.txt",
+    "test_data_path": "../data/devwithoutlabels.txt",
+    "solution_path": "soln.txt",
+    "glove_dir": "_files/",
+    "num_folds": 10,
+    "num_classes": 4,
+    "max_nb_words": 15000,
+    "max_sequence_length": 24,
+    "embedding_dim": 300,
+    "custom_embedding_dim": 100,
+    "batch_size": 128,
+    "lstm_dim": 800,
+    "dropout": 0.5,
+    "learning_rate": 1e-4,
+    "num_epochs": 10
+}
