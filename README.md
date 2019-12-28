@@ -1,5 +1,7 @@
 # EmoContext - Task Report
 
+> I've noticed that quite a few people have starred or forked this repository. I dont' remember much of the work I had done for this, but I do remember that everything I had messed around after december 13th more or less ended up worsening performance. If you are interested in what I have done here it might be best if you go through the commit history and find a version around December 2018 and work from there.
+
 - **Student ID:** 801084292
 - **Student email:** ddhamani@uncc.edu
 
